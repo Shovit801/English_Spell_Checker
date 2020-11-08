@@ -6,7 +6,7 @@
 #include <sstream>
 #include"unordered_map"
 using namespace std;
-void lower(string& str)
+void lower(string& str)                                          //function def to conver the entire query entered into lower case 
 {
     int length = str.length();
     for (int i = 0; i < length; i++) {
@@ -15,7 +15,7 @@ void lower(string& str)
             str[i] = tolower(c);
     }
 }
-int editDist(string str1, string str2,int m,int n)
+int editDist(string str1, string str2,int m,int n)             //funcrion for finding the edit distance between query entered and words obtained from lexicon
 {
 
 
@@ -37,7 +37,7 @@ int editDist(string str1, string str2,int m,int n)
                    );
 }
 int main() {
-    ifstream input_from_file("dict_final.csv");
+    ifstream input_from_file("dict_final.csv");                 //openeing the CSV file created in the earlier programme (code present in Creating Dict folder)
     string line;
      vector<vector<string> >  words(676);
      string word;
@@ -50,7 +50,7 @@ int main() {
             {
                 stringstream ss(line);
                 {
-                    while (getline(ss, word, ','))
+                    while (getline(ss, word, ','))         //reading the Lexicon in CSV format and pushing the entire collection of words to the 2d vector "words"
                         words[i].push_back(word);
                 }
             }
@@ -61,13 +61,13 @@ int main() {
          cin>>query;
          lower(query);
     string str=query;
-    int query_size=query.size()-3;
+    int query_size=query.size()-3;                      
         vector<string> v;
         for(int i=0;i<query.size()-1;i++){
                 string s="";
                 s.push_back(str[i]);
                 s.push_back(str[i+1]);
-                v.push_back(s); //here we are pushing the bigrams from the query entered into the v vector
+                v.push_back(s);                      // pushing the bigrams from the query entered into the "v" vector
         }
         int y;
 
@@ -78,24 +78,24 @@ int main() {
         {
             for(int j=0;j<676;j++)
                {
-                   if(words[j][0]==v[i]) //and here we are comparing it with the first column of the csv file (the 2d vector)
+                   if(words[j][0]==v[i])            //comparing the bigrams obtained with the first column of the csv file (the 2d vector) which consists of all the combination                                                        of bigrams possible 
                    {
                         for(int itr=1;itr<words[j].size();itr++)
                         {
-                            final_list.push_back(words[j][itr]); //needs to be edited as shown in the youtube video
-                            m[words[j][itr]]++;
+                            final_list.push_back(words[j][itr]); //pushing the matched list of words into another vector "final_list"
+                            m[words[j][itr]]++;                     //using map function to seperate the words with common bigrams with the query entered 
                         }
                         break;
                    }
 
                }
         }
-        //cout<<m.size()<<endl;
+       
         vector<string> final_final_list;
         for(int i=0;i<final_list.size();i++){
-            if(m[final_list[i]]>=query_size && (final_list[i].size()<=query.size()+1 && final_list[i].size()>=query.size()-1)){
+            if(m[final_list[i]]>=query_size && (final_list[i].size()<=query.size()+1 && final_list[i].size()>=query.size()-1)){  //creating condition for selecting from the words with common bigrams (no. of bigrams to match for getting selected is created)
                 m[final_list[i]]=0;
-                final_final_list.push_back(final_list[i]);
+                final_final_list.push_back(final_list[i]);  //final list of selected words is pushed into vector "final_final_list"
             }
         }
 
@@ -103,8 +103,9 @@ int main() {
         int count1=0;
         int k;
         for(int i=0;i<final_final_list.size();i++){
-            k=editDist(query,final_final_list[i],query.size(),final_final_list[i].size());
-            if(k==1){
+            k=editDist(query,final_final_list[i],query.size(),final_final_list[i].size());  //edit distance is calculated from the query entered and the final list of selected words
+            if(k==1){                   //words with edit distance of 1 is pushed into final vector for output "suggestions"
+                                        //edit distance can be increased to increase the number of suggested words
                 string q=final_final_list[i];
                 suggestions.push_back(q);
             }
