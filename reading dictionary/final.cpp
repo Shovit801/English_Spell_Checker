@@ -55,7 +55,8 @@ int main() {
                 }
             }
        }
-
+while(1)
+{
          cout<<"enter your query"<<endl;
          string query;
          cin>>query;
@@ -122,4 +123,5 @@ int main() {
         if(k!=0 && suggestions.empty())
             cout<<"No matching words found"<<endl;
 
+}
 }
